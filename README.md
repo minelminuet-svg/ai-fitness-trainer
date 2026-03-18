@@ -357,7 +357,7 @@ Contributions are welcome! Please follow these steps:
 
 **Your Name**
 - GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- Email: davyxn@proton.me
 
 ## 🙏 Acknowledgments
 
@@ -368,7 +368,7 @@ Contributions are welcome! Please follow these steps:
 
 ## 📞 Support
 
-For support, email support@example.com or open an issue on GitHub.
+For support, email davyxn@proton.me or open an issue on GitHub.
 
 ## 🎯 Roadmap
 
