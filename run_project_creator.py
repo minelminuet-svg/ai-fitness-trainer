@@ -1,0 +1,261 @@
+import os
+import sys
+from pathlib import Path
+
+# Base directory
+base_dir = Path(r'c:\Users\selds\Documents\ai trainer\fitness_trainer')
+
+# Create base directory
+try:
+    base_dir.mkdir(parents=True, exist_ok=True)
+    print(f'✓ Created main directory: {base_dir}')
+except Exception as e:
+    print(f'✗ Failed to create base directory: {e}')
+    sys.exit(1)
+
+# Create subdirectories with __init__.py files
+subdirs = ['main', 'pose_estimation', 'exercises', 'feedback', 'data', 'api', 'ui', 'tests', 'utils']
+
+for subdir in subdirs:
+    try:
+        subdir_path = base_dir / subdir
+        subdir_path.mkdir(exist_ok=True)
+        init_file = subdir_path / '__init__.py'
+        init_file.touch()
+        print(f'✓ Created {subdir}/')
+    except Exception as e:
+        print(f'✗ Failed to create {subdir}: {e}')
+
+# Create requirements.txt
+requirements_content = """opencv-python==4.8.1.78
+mediapipe==0.10.3
+numpy==1.24.3
+Flask==3.0.0
+python-dotenv==1.0.0
+Pillow==10.0.1
+scipy==1.11.3
+tensorflow==2.13.0
+scikit-learn==1.3.1
+matplotlib==3.8.1
+"""
+try:
+    (base_dir / 'requirements.txt').write_text(requirements_content)
+    print('✓ Created requirements.txt')
+except Exception as e:
+    print(f'✗ Failed to create requirements.txt: {e}')
+
+# Create .gitignore
+gitignore_content = """# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+
+# Data and logs
+*.log
+data/
+models/
+outputs/
+*.mp4
+*.avi
+*.png
+*.jpg
+
+# OS
+.DS_Store
+Thumbs.db
+"""
+try:
+    (base_dir / '.gitignore').write_text(gitignore_content)
+    print('✓ Created .gitignore')
+except Exception as e:
+    print(f'✗ Failed to create .gitignore: {e}')
+
+# Create config.py
+config_content = '''"""Configuration settings for AI Fitness Trainer"""
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
+
+# Model settings
+POSE_MODEL = 'pose_landmarker_lite.task'
+MIN_DETECTION_CONFIDENCE = 0.5
+MIN_TRACKING_CONFIDENCE = 0.5
+
+# Video settings
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 480
+FPS = 30
+
+# API settings
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+PORT = int(os.getenv('PORT', 5000))
+HOST = os.getenv('HOST', '0.0.0.0')
+'''
+try:
+    (base_dir / 'config.py').write_text(config_content)
+    print('✓ Created config.py')
+except Exception as e:
+    print(f'✗ Failed to create config.py: {e}')
+
+# Create app.py
+app_content = '''"""Main entry point for AI Fitness Trainer"""
+from flask import Flask
+from config import DEBUG, PORT, HOST
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return {'message': 'AI Fitness Trainer API'}
+
+@app.route('/health')
+def health():
+    return {'status': 'healthy'}
+
+if __name__ == '__main__':
+    app.run(host=HOST, port=PORT, debug=DEBUG)
+'''
+try:
+    (base_dir / 'app.py').write_text(app_content)
+    print('✓ Created app.py')
+except Exception as e:
+    print(f'✗ Failed to create app.py: {e}')
+
+# Create .env.example
+env_example_content = """# Environment Configuration
+DEBUG=True
+PORT=5000
+HOST=0.0.0.0
+MODEL_PATH=./models
+DATA_PATH=./data
+"""
+try:
+    (base_dir / '.env.example').write_text(env_example_content)
+    print('✓ Created .env.example')
+except Exception as e:
+    print(f'✗ Failed to create .env.example: {e}')
+
+# Create README.md
+readme_content = """# AI Fitness Trainer
+
+An AI-powered fitness training application using pose estimation and exercise tracking.
+
+## Features
+- Real-time pose estimation using MediaPipe
+- Exercise recognition and form analysis
+- Real-time feedback on exercise execution
+- Web UI for interactive training sessions
+- REST API for integration
+
+## Project Structure
+- **main/**: Core application logic
+- **pose_estimation/**: Pose detection and processing
+- **exercises/**: Exercise definitions and validation
+- **feedback/**: Real-time feedback engine
+- **data/**: Data storage and management
+- **api/**: Flask REST API endpoints
+- **ui/**: Web user interface
+- **tests/**: Unit and integration tests
+- **utils/**: Utility functions and helpers
+
+## Installation
+1. Clone the repository
+2. Install dependencies: pip install -r requirements.txt
+3. Copy .env.example to .env and configure settings
+4. Run the application: python app.py
+
+## Usage
+```python
+from main import FitnessTrainer
+trainer = FitnessTrainer()
+trainer.start()
+```
+
+## License
+MIT
+"""
+try:
+    (base_dir / 'README.md').write_text(readme_content)
+    print('✓ Created README.md')
+except Exception as e:
+    print(f'✗ Failed to create README.md: {e}')
+
+print('\n' + '='*60)
+print('All files created successfully!')
+print('='*60)
+print(f'\nBase directory: {base_dir}')
+
+# Display tree structure
+print('\n' + '='*60)
+print('FINAL DIRECTORY STRUCTURE')
+print('='*60)
+
+def print_tree(directory, prefix="", max_depth=5, current_depth=0):
+    if current_depth >= max_depth:
+        return
+    
+    path = Path(directory)
+    try:
+        items = sorted(path.iterdir())
+    except PermissionError:
+        return
+    
+    for i, item in enumerate(items):
+        is_last_item = i == len(items) - 1
+        current_prefix = "└── " if is_last_item else "├── "
+        print(f"{prefix}{current_prefix}{item.name}")
+        
+        if item.is_dir() and current_depth < max_depth - 1:
+            next_prefix = prefix + ("    " if is_last_item else "│   ")
+            print_tree(item, next_prefix, max_depth, current_depth + 1)
+
+print(f"\nfitness_trainer/")
+print_tree(base_dir)
+
+print("\n" + "="*60)
+print("SCRIPT EXECUTION COMPLETE")
+print("="*60)
+
+if __name__ == '__main__':
+    pass

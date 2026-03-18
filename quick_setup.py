@@ -1,0 +1,1 @@
+import os; from pathlib import Path; base_dir = Path(r"c:\Users\selds\Documents\ai trainer\fitness_trainer"); base_dir.mkdir(parents=True, exist_ok=True); [Path(base_dir, subdir).mkdir(exist_ok=True) or Path(base_dir, subdir, "__init__.py").touch() for subdir in ["main", "pose_estimation", "exercises", "feedback", "data", "api", "ui", "tests", "utils"]]; print("Setup complete!")

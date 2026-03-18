@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Trainer</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>💪 AI Fitness Trainer</h1>
+                <p class="subtitle">Real-time exercise guidance with AI-powered pose detection</p>
+            </div>
+            <div class="header-status">
+                <div id="healthStatus" class="status-indicator">Checking...</div>
+            </div>
+        </header>
+
+        <!-- Main Navigation -->
+        <nav class="main-nav">
+            <button class="nav-btn active" data-view="home">🏠 Home</button>
+            <button class="nav-btn" data-view="exercises">📋 Exercises</button>
+            <button class="nav-btn" data-view="training">🎯 Training</button>
+            <button class="nav-btn" data-view="history">📊 History</button>
+            <button class="nav-btn" data-view="about">ℹ️ About</button>
+        </nav>
+
+        <!-- Views Container -->
+        <main class="main-content">
+
+            <!-- Home View -->
+            <section id="homeView" class="view active">
+                <div class="hero-section">
+                    <h2>Welcome to AI Fitness Trainer</h2>
+                    <p>Get real-time feedback on your exercise form using advanced pose detection.</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">📹</div>
+                            <h3>Real-time Pose Detection</h3>
+                            <p>Advanced AI tracks your movements in real-time with high accuracy</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">✅</div>
+                            <h3>Form Validation</h3>
+                            <p>Get instant feedback on your exercise form and technique</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Progress Tracking</h3>
+                            <p>Track your repetitions, sets, and overall progress</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Personalized Guidance</h3>
+                            <p>Get tips and corrections tailored to your workout</p>
+                        </div>
+                    </div>
+
+                    <div class="cta-buttons">
+                        <button class="btn btn-primary" onclick="switchView('exercises')">Get Started</button>
+                        <button class="btn btn-secondary" onclick="switchView('about')">Learn More</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exercises View -->
+            <section id="exercisesView" class="view">
+                <div class="exercises-container">
+                    <h2>Available Exercises</h2>
+                    
+                    <div class="filters">
+                        <select id="typeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="arm">Arm Exercises</option>
+                            <option value="leg">Leg Exercises</option>
+                            <option value="core">Core Exercises</option>
+                            <option value="cardio">Cardio</option>
+                            <option value="flexibility">Flexibility</option>
+                            <option value="full_body">Full Body</option>
+                        </select>
+                        
+                        <select id="difficultyFilter" class="filter-select">
+                            <option value="">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+
+                    <div id="exercisesGrid" class="exercises-grid">
+                        <!-- Exercises will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Training View -->
+            <section id="trainingView" class="view">
+                <div class="training-container">
+                    <h2>Training Session</h2>
+                    
+                    <div class="training-grid">
+                        <!-- Video Feed Section -->
+                        <div class="video-section">
+                            <div id="videoPreviewer" class="video-preview">
+                                <video id="videoFeed" autoplay playsinline></video>
+                                <canvas id="canvas" style="display:none;"></canvas>
+                                <div class="video-placeholder">📹 Video feed will appear here</div>
+                            </div>
+                        </div>
+
+                        <!-- Control Panel -->
+                        <div class="control-panel">
+                            <div class="exercise-info">
+                                <h3 id="currentExercise">No Exercise Selected</h3>
+                                <p id="exerciseDescription"></p>
+                            </div>
+
+                            <div class="stats-panel">
+                                <div class="stat-item">
+                                    <span class="stat-label">Reps</span>
+                                    <span id="repCount" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Sets</span>
+                                    <span id="setCount" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Form Score</span>
+                                    <span id="formScore" class="stat-value">0%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Duration</span>
+                                    <span id="duration" class="stat-value">0:00</span>
+                                </div>
+                            </div>
+
+                            <div class="feedback-panel">
+                                <h4>💡 Feedback & Tips</h4>
+                                <div id="feedbackList" class="feedback-items">
+                                    <p class="placeholder">Select an exercise to get started</p>
+                                </div>
+                            </div>
+
+                            <div class="controls">
+                                <button id="startBtn" class="btn btn-primary" onclick="startTraining()">Start Session</button>
+                                <button id="pauseBtn" class="btn btn-secondary" onclick="pauseTraining()" disabled>Pause</button>
+                                <button id="endBtn" class="btn btn-danger" onclick="endTraining()" disabled>End Session</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History View -->
+            <section id="historyView" class="view">
+                <div class="history-container">
+                    <h2>Training History</h2>
+                    <div class="history-content">
+                        <p class="placeholder">No training sessions yet. Start a training session to see your history!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About View -->
+            <section id="aboutView" class="view">
+                <div class="about-container">
+                    <h2>About AI Fitness Trainer</h2>
+                    <div class="about-content">
+                        <h3>What is AI Fitness Trainer?</h3>
+                        <p>AI Fitness Trainer is an intelligent fitness application that uses advanced pose estimation technology to provide real-time feedback on your exercise form and technique.</p>
+
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li><strong>Real-time Pose Detection:</strong> Uses MediaPipe to detect and track your body positions</li>
+                            <li><strong>Form Analysis:</strong> Validates your exercise form against proper technique guidelines</li>
+                            <li><strong>Rep Counting:</strong> Automatically counts repetitions and sets</li>
+                            <li><strong>Instant Feedback:</strong> Get real-time tips and corrections</li>
+                            <li><strong>Progress Tracking:</strong> Monitor your workout history and improvements</li>
+                        </ul>
+
+                        <h3>Supported Exercises</h3>
+                        <ul>
+                            <li>Bicep Curls</li>
+                            <li>Squats</li>
+                            <li>Push-ups</li>
+                            <li>Planks</li>
+                            <li>Shoulder Press</li>
+                        </ul>
+
+                        <h3>Technology</h3>
+                        <p>Built with:</p>
+                        <ul>
+                            <li>Python Backend (Flask)</li>
+                            <li>MediaPipe for Pose Detection</li>
+                            <li>OpenCV for Video Processing</li>
+                            <li>Modern Web UI (HTML5, CSS3, JavaScript)</li>
+                        </ul>
+
+                        <h3>Tips for Best Results</h3>
+                        <ul>
+                            <li>Use good lighting for optimal pose detection</li>
+                            <li>Keep the entire body visible in the camera frame</li>
+                            <li>Start with beginner exercises to learn the system</li>
+                            <li>Follow the form guidance provided by the AI</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 AI Fitness Trainer. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="static/js/api-client.js"></script>
+    <script src="static/js/utils.js"></script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>
